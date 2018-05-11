@@ -1,6 +1,8 @@
 drop procedure outTCP;
 drop procedure outUDP;
 drop procedure outICMP;
+drop event hourlydump;
+
 delimiter //
 create procedure outTCP()
 BEGIN
@@ -27,7 +29,10 @@ BEGIN
 	execute stmt;
 END//
 delimiter ;
+CREATE EVENT dailydump
+ON SCHEDULE EVERY 24 HOURS
+DO
+	call outTCP();
+	call outUDP();
+	call outICMP();
 
-call outTCP();
-call outUDP();
-call outICMP();
